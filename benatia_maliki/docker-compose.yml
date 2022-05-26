@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  mysql-irr4:
+    image: mysql:latest
+    environment:
+    
+      - MYSQL_DATABASE=incidents
+      - MYSQL_USER=root
+
+    ports:
+    - 3306:3306
+
+    container_name: mysql
+    
+  benatia_maliki:
+    image: benatia_maliki
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-irr4:3306/incidents?autoReconnect=true&useSSL=false
+    
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+
+    container_name: benatia_maliki
